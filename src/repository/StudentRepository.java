@@ -1,47 +1,70 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-package domen;
+package repository;
+
+import domen.Modul;
+import domen.NivoStudija;
+import domen.Student;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
- * @author janja
+ * @author nn
  */
-public class Kompanija {
-    
-    private int kompanijaID;
-    private String nazivKonpanije;
-    private String maticniBrojKompanije;
-    private Mesto mesto;
+public class StudentRepository {
+    Connection konekcija;
+    Repository repository;
 
-    public Kompanija(int kompanijaID, String nazivKonpanije) {
-        this.kompanijaID = kompanijaID;
-        this.nazivKonpanije = nazivKonpanije;
-    }
-
-    public int getKompanijaID() {
-        return kompanijaID;
-    }
-
-    public void setKompanijaID(int kompanijaID) {
-        this.kompanijaID = kompanijaID;
-    }
-
-    public String getNazivKonpanije() {
-        return nazivKonpanije;
-    }
-
-    public void setNazivKonpanije(String nazivKonpanije) {
-        this.nazivKonpanije = nazivKonpanije;
-    
+    public StudentRepository() {
+        konekcija=repository.returnConnection();
+        
     }
     
-       public void saveStudent(Student student){
+    
+    
+    
+    public List<Student> getAll(){ //pristupi bazi i uzmi i vrati sve studente
+        List<Student> list=new ArrayList<>();
         try{
-           String url="jdbc:mysql://localhost:3360/PraksaApp";
-           Connection konekcija=DriverManager.getConnection(url, "root", "");
-           // System.out.println("Uspesno uspostavljanje konekcije");
+        
+           String query = "SELECT * FROM student ORDER BY prezime";
+            java.sql.Statement statement =konekcija.createStatement();
+            java.sql.ResultSet rs= statement.executeQuery(query);
+            
+            while(rs.next()){
+                int id=rs.getInt("studentID");
+                String jmbg = rs.getString("jmbg");
+                String brojIndeksa = rs.getString("brojIndeksa");
+                String ime = rs.getString("ime");
+                String prezime = rs.getString("prezime");
+                
+                Modul modul = (Modul)rs.getObject("modul");
+                NivoStudija nivo=(NivoStudija)rs.getObject("nivoStudija");
+                Student s=new Student(id, jmbg, brojIndeksa, ime, prezime, modul, nivo);
+                
+                list.add(s);
+            }
+            
+        } catch(SQLException ex){
+            System.out.println("Greska pri konekciji");
+        }
+     
+        
+        
+        return list;
+    }
+    
+     public void saveStudent(Student student){
+        try{
+          
            
            String query = "INSERT INTO student VALUES(?, ?, ?, ?, ?, ?, ?)";
            PreparedStatement ps =konekcija.prepareStatement(query);
@@ -61,11 +84,9 @@ public class Kompanija {
         }
     }
     
-    public void deleteStudent(Student student){
+     public void deleteStudent(Student student){
         try{
-            String url="jdbc:mysql://localhost:3360/PraksaApp";
-           Connection konekcija=DriverManager.getConnection(url, "root", "");
-           // System.out.println("Uspesno uspostavljanje konekcije");
+           
            
            String query = "DELETE FROM student where brojIndeksa=" + student.getBrojIndeksa();
             System.out.println(query);
@@ -84,9 +105,7 @@ public class Kompanija {
         
         try{
         
-            String url="jdbc:mysql://localhost:3360/PraksaApp";
-           Connection konekcija=DriverManager.getConnection(url, "root", "");
-           // System.out.println("Uspesno uspostavljanje konekcije");
+          
            
            String query = "UPDATE student SET jmbg = ?, brojIndeksa = ?, ime = ?, prezime = ?, modul = ?, nivo = ? WHERE studentID =" + student.getStudentID();
            java.sql.PreparedStatement ps = konekcija.prepareStatement(query);
@@ -104,9 +123,10 @@ public class Kompanija {
              System.out.println(ex.getMessage());
         }
         
+    }
+    public static void main(String[] args) {
+      
         
-        
-    
-    
-    
+    }
+     
 }
