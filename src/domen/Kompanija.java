@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package domen;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 /**
  *
  * @author janja
@@ -106,7 +109,7 @@ public class Kompanija {
         
         
         
-    
-    
-    
+    }
 }
+
+
