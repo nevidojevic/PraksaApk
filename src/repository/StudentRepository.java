@@ -107,7 +107,7 @@ public class StudentRepository {
         
           
            
-           String query = "UPDATE student SET jmbg = ?, brojIndeksa = ?, ime = ?, prezime = ?, modul = ?, nivo = ? WHERE studentID =" + student.getStudentID();
+           String query = "UPDATE student SET jmbg = ?, brojIndeksa = ?, ime = ?, prezime = ?, modul = ?, nivo = ? WHERE id =" + student.getStudentID();
            java.sql.PreparedStatement ps = konekcija.prepareStatement(query);
            ps.setString(1, student.getJmbg());
            ps.setString(2, student.getBrojIndeksa());
